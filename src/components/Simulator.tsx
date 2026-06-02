@@ -10,6 +10,11 @@ import { useToast } from "@/hooks/use-toast";
 import InputMask from "react-input-mask";
 import { sendToWebhook } from "@/services/webhook";
 import {
+  createLeadEventId,
+  sendConfiguredLeadWebhook,
+  trackLeadConversion,
+} from "@/services/tracking";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -104,6 +109,7 @@ const Simulator = () => {
 
     const today = new Date().toISOString().split('T')[0];
     const downPaymentValue = formData.hasDownPayment === "Sim" ? formData.downPaymentAmount : "Não tem";
+    const leadEventId = createLeadEventId();
 
     const webhookData = {
       "Data de Entrada": today,
@@ -140,7 +146,13 @@ const Simulator = () => {
     try {
       console.log("Enviando dados para webhooks e Kommo:", webhookData);
 
-      const [makeResult, kommoResult, webhookResult] = await Promise.allSettled([
+      const [
+        makeResult,
+        kommoResult,
+        webhookResult,
+        configuredWebhookResult,
+        metaConversionResult,
+      ] = await Promise.allSettled([
         fetch(webhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -150,6 +162,8 @@ const Simulator = () => {
           body: kommoData,
         }),
         sendToWebhook(externalWebhookData),
+        sendConfiguredLeadWebhook(externalWebhookData, leadEventId),
+        trackLeadConversion(externalWebhookData, leadEventId),
       ]);
 
       // Process Kommo result
@@ -183,6 +197,26 @@ const Simulator = () => {
         }
       } else {
         console.error("Erro no webhook externo:", webhookResult.reason);
+      }
+
+      if (
+        configuredWebhookResult.status === "fulfilled" &&
+        !configuredWebhookResult.value.skipped &&
+        !configuredWebhookResult.value.success
+      ) {
+        console.error("Erro no webhook configurado:", configuredWebhookResult.value.error);
+      } else if (configuredWebhookResult.status === "rejected") {
+        console.error("Erro no webhook configurado:", configuredWebhookResult.reason);
+      }
+
+      if (
+        metaConversionResult.status === "fulfilled" &&
+        !metaConversionResult.value.skipped &&
+        !metaConversionResult.value.success
+      ) {
+        console.error("Erro na Conversion API:", metaConversionResult.value.error);
+      } else if (metaConversionResult.status === "rejected") {
+        console.error("Erro na Conversion API:", metaConversionResult.reason);
       }
 
       // Check if Make was successful
