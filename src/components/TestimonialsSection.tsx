@@ -17,6 +17,11 @@ type ClientMedia = {
 
 const clientMedia: ClientMedia[] = [
   {
+    src: "/clientes-contemplados/cliente-contemplado-09.mov",
+    type: "video",
+    label: "Video de cliente contemplado em destaque",
+  },
+  {
     src: "/clientes-contemplados/cliente-contemplado-01.jpeg",
     type: "image",
     label: "Cliente contemplado 1",
@@ -55,11 +60,6 @@ const clientMedia: ClientMedia[] = [
     src: "/clientes-contemplados/cliente-contemplado-08.mov",
     type: "video",
     label: "Video de cliente contemplado 8",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-09.mov",
-    type: "video",
-    label: "Video de cliente contemplado 9",
   },
 ];
 
