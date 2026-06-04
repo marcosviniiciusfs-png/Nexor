@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type InputHTMLAttributes, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import InputMask from "react-input-mask";
-import {
-  createLeadEventId,
-  sendConfiguredLeadWebhook,
-  trackLeadConversion,
-} from "@/services/tracking";
+import { sendLeadWebhook } from "@/services/leadWebhook";
+import { createLeadEventId } from "@/services/tracking";
 import {
   Select,
   SelectContent,
@@ -121,35 +118,6 @@ const Simulator = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const webhookUrl = "https://hook.us1.make.com/m60b3l3wcknirc4fc7ezy3553yso5jih";
-
-    const today = new Date().toISOString().split('T')[0];
-    const downPaymentValue = formData.hasDownPayment === "Sim" ? formData.downPaymentAmount : "Não tem";
-    const leadEventId = createLeadEventId();
-
-    const webhookData = {
-      "Data de Entrada": today,
-      "Nome Completo": formData.fullName.trim(),
-      "WhatsApp": formData.whatsapp,
-      "Tipo de Bem": formData.propertyType,
-      "Valor Pretendido (R$)": formData.creditAmount,
-      "Valor de Entrada (R$)": downPaymentValue,
-      "Parcela Ideal (R$)": formData.monthlyPayment,
-      "Cidade": formData.city.trim()
-    };
-
-    const externalWebhookData = {
-      fullName: formData.fullName.trim(),
-      whatsapp: formData.whatsapp,
-      creditAmount: formData.creditAmount,
-      hasDownPayment: formData.hasDownPayment,
-      downPaymentAmount: downPaymentValue,
-      monthlyPayment: formData.monthlyPayment,
-      city: formData.city.trim(),
-      acquisitionTime: formData.acquisitionTime,
-      propertyType: formData.propertyType,
-    };
-
     const validationError = validateFormData();
     if (validationError) {
       setIsSubmitting(false);
@@ -161,76 +129,48 @@ const Simulator = () => {
       return;
     }
 
+    const downPaymentValue = formData.hasDownPayment === "Sim" ? formData.downPaymentAmount : "Não tem";
+    const leadEventId = createLeadEventId();
+
+    const leadData = {
+      fullName: formData.fullName.trim(),
+      whatsapp: formData.whatsapp,
+      creditAmount: formData.creditAmount,
+      hasDownPayment: formData.hasDownPayment,
+      downPaymentAmount: downPaymentValue,
+      monthlyPayment: formData.monthlyPayment,
+      city: formData.city.trim(),
+      acquisitionTime: formData.acquisitionTime,
+      propertyType: formData.propertyType,
+    };
+
     try {
-      console.log("Enviando dados para webhooks e Meta CAPI:", webhookData);
+      console.log("Enviando lead para webhook:", leadData);
 
-      const [
-        makeResult,
-        configuredWebhookResult,
-        metaConversionResult,
-      ] = await Promise.allSettled([
-        fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(webhookData),
-        }),
-        sendConfiguredLeadWebhook(externalWebhookData, leadEventId),
-        trackLeadConversion(externalWebhookData, leadEventId),
-      ]);
+      const leadWebhookResult = await sendLeadWebhook(leadData, leadEventId);
 
-      if (
-        configuredWebhookResult.status === "fulfilled" &&
-        !configuredWebhookResult.value.skipped &&
-        !configuredWebhookResult.value.success
-      ) {
-        console.error("Erro no webhook configurado:", configuredWebhookResult.value.error);
-      } else if (configuredWebhookResult.status === "rejected") {
-        console.error("Erro no webhook configurado:", configuredWebhookResult.reason);
+      if (!leadWebhookResult.success) {
+        throw new Error(leadWebhookResult.error || "Erro ao enviar lead.");
       }
 
-      if (
-        metaConversionResult.status === "fulfilled" &&
-        !metaConversionResult.value.skipped &&
-        !metaConversionResult.value.success
-      ) {
-        console.error("Erro na Conversion API:", metaConversionResult.value.error);
-      } else if (metaConversionResult.status === "rejected") {
-        console.error("Erro na Conversion API:", metaConversionResult.reason);
-      }
+      toast({
+        title: "Simulação enviada",
+        description: "Recebemos seus dados e entraremos em contato em breve.",
+      });
 
-      if (
-        metaConversionResult.status === "fulfilled" &&
-        !metaConversionResult.value.success
-      ) {
-        throw new Error(
-          `Erro na API de Conversoes da Meta: ${
-            metaConversionResult.value.error || "tente novamente."
-          }`
-        );
-      }
-
-      if (metaConversionResult.status === "rejected") {
-        throw new Error("Erro na API de Conversoes da Meta: tente novamente.");
-      }
-
-      // Check if Make was successful
-      if (makeResult.status === 'fulfilled' && makeResult.value.ok) {
-        setFormData({
-          propertyType: "",
-          acquisitionTime: "",
-          creditAmount: "",
-          hasDownPayment: "",
-          downPaymentAmount: "",
-          monthlyPayment: "",
-          city: "",
-          fullName: "",
-          whatsapp: ""
-        });
-        setCurrentStep(0);
-        navigate("/obrigado");
-      } else {
-        throw new Error("Erro ao enviar dados para Make");
-      }
+      setFormData({
+        propertyType: "",
+        acquisitionTime: "",
+        creditAmount: "",
+        hasDownPayment: "",
+        downPaymentAmount: "",
+        monthlyPayment: "",
+        city: "",
+        fullName: "",
+        whatsapp: ""
+      });
+      setCurrentStep(0);
+      navigate("/obrigado");
     } catch (error) {
       console.error("Erro ao enviar:", error);
       setIsSubmitting(false);
@@ -413,8 +353,7 @@ const Simulator = () => {
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
             >
-              {/* @ts-ignore */}
-              {(inputProps: any) => (
+              {(inputProps: InputHTMLAttributes<HTMLInputElement>) => (
                 <Input
                   {...inputProps}
                   id="whatsapp"
