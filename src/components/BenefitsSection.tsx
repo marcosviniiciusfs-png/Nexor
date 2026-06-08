@@ -1,4 +1,5 @@
 import { MessageCircle, DollarSign, FileText } from "lucide-react";
+import grupoUniaoLogo from "@/assets/grupo-uniao-logo.png";
 
 const BenefitsSection = () => {
   const benefits = [
@@ -18,6 +19,7 @@ const BenefitsSection = () => {
       description: "Faça quantas simulações quiser, totalmente grátis e sem consulta ao SPC ou Serasa."
     }
   ];
+  const partnerBanks = ["Itaú", "Bradesco", "Caixa", "Santander"];
 
   return (
     <section id="beneficios" className="py-16 bg-secondary/30">
@@ -49,6 +51,37 @@ const BenefitsSection = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl md:text-3xl font-bold text-primary mb-3">
+              Bancos parceiros para financiamento
+            </h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Trabalhamos com instituições reconhecidas para ampliar suas possibilidades de crédito e encontrar condições adequadas ao seu plano.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {partnerBanks.map((bank) => (
+              <div
+                key={bank}
+                className="min-h-[150px] rounded-lg border border-brand-blue/15 bg-background p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-blue/40 hover:shadow-lg"
+              >
+                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-lg border border-orange/20 bg-white p-2">
+                  <img
+                    src={grupoUniaoLogo}
+                    alt={`Logo ${bank}`}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <p className="text-center text-lg font-semibold text-foreground">
+                  {bank}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
