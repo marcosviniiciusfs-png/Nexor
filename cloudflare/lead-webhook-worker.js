@@ -25,6 +25,26 @@ const readResponseBody = async (response) => {
   }
 };
 
+const isPostMethodMismatch = (response, data) => {
+  if (response.status !== 404) return false;
+
+  const message =
+    typeof data === "string"
+      ? data
+      : data && typeof data === "object" && data.message
+        ? String(data.message)
+        : "";
+
+  return /not registered for post requests/i.test(message);
+};
+
+const appendQueryParams = (url, payload) => {
+  for (const [key, value] of Object.entries(payload)) {
+    if (value === undefined || value === null) continue;
+    url.searchParams.set(key, String(value));
+  }
+};
+
 const compactObject = (object) =>
   Object.fromEntries(Object.entries(object).filter(([, value]) => value !== undefined && value !== null && value !== ""));
 
@@ -161,22 +181,52 @@ const sendLeadWebhook = async (leadData, env) => {
     return { success: false, error: "LEAD_WEBHOOK_TOKEN is not configured" };
   }
 
+  const leadPayload = buildLeadPayload(leadData);
   const response = await fetch(env.LEAD_WEBHOOK_URL, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.LEAD_WEBHOOK_TOKEN}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(buildLeadPayload(leadData)),
+    body: JSON.stringify(leadPayload),
   });
 
   const data = await readResponseBody(response);
+
+  if (isPostMethodMismatch(response, data)) {
+    const getUrl = new URL(env.LEAD_WEBHOOK_URL);
+    appendQueryParams(getUrl, leadPayload);
+
+    const getResponse = await fetch(getUrl.toString(), {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${env.LEAD_WEBHOOK_TOKEN}`,
+      },
+    });
+    const getData = await readResponseBody(getResponse);
+
+    if (!getResponse.ok) {
+      return {
+        success: false,
+        status: getResponse.status,
+        data: getData,
+        method: "GET",
+        error:
+          getData && typeof getData === "object" && getData.message
+            ? String(getData.message)
+            : `Lead webhook error: ${getResponse.status}`,
+      };
+    }
+
+    return { success: true, status: getResponse.status, data: getData, method: "GET" };
+  }
 
   if (!response.ok) {
     return {
       success: false,
       status: response.status,
       data,
+      method: "POST",
       error:
         data && typeof data === "object" && data.message
           ? String(data.message)
@@ -184,7 +234,7 @@ const sendLeadWebhook = async (leadData, env) => {
     };
   }
 
-  return { success: true, status: response.status, data };
+  return { success: true, status: response.status, data, method: "POST" };
 };
 
 const sendMetaCapi = async (leadData, request, env) => {
