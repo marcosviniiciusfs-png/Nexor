@@ -1,5 +1,5 @@
 import { Phone, MapPin, Clock, Instagram } from "lucide-react";
-import grupoUniaoLogo from "@/assets/grupo-mb-logo.png";
+import grupoUniaoLogo from "@/assets/grupo-uniao-logo.png";
 import facebookIcon from "@/assets/facebook.png";
 
 const Footer = () => {
@@ -9,11 +9,11 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex flex-col items-center md:items-start gap-2 mb-4">
-              <div className="h-20 w-40 overflow-visible flex items-center justify-center md:justify-start">
+              <div className="h-32 w-32 flex items-center justify-center md:justify-start">
                 <img
                   src={grupoUniaoLogo}
                   alt="Grupo União"
-                  className="h-20 w-auto max-w-none origin-center md:origin-left scale-[2.25]"
+                  className="h-32 w-32 object-contain"
                 />
               </div>
             </div>
