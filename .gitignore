@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Local source assets kept out of deploy commits
+Nova logo/
+Nova Logo/
+Clientes contemplados/
+Clientes Contemplados/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

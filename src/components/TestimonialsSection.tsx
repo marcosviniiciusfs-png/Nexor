@@ -17,49 +17,14 @@ type ClientMedia = {
 
 const clientMedia: ClientMedia[] = [
   {
-    src: "/clientes-contemplados/cliente-contemplado-09.mov",
+    src: "/clientes-contemplados/cliente-contemplado-01.mp4",
     type: "video",
-    label: "Video de cliente contemplado em destaque",
+    label: "Video de cliente contemplado 1",
   },
   {
-    src: "/clientes-contemplados/cliente-contemplado-01.jpeg",
-    type: "image",
-    label: "Cliente contemplado 1",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-02.jpeg",
-    type: "image",
-    label: "Cliente contemplado 2",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-03.jpeg",
-    type: "image",
-    label: "Cliente contemplado 3",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-04.jpeg",
-    type: "image",
-    label: "Cliente contemplado 4",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-05.mp4",
+    src: "/clientes-contemplados/cliente-contemplado-02.mp4",
     type: "video",
-    label: "Video de cliente contemplado 5",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-06.mp4",
-    type: "video",
-    label: "Video de cliente contemplado 6",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-07.jpeg",
-    type: "image",
-    label: "Cliente contemplado 7",
-  },
-  {
-    src: "/clientes-contemplados/cliente-contemplado-08.mov",
-    type: "video",
-    label: "Video de cliente contemplado 8",
+    label: "Video de cliente contemplado 2",
   },
 ];
 
@@ -141,7 +106,7 @@ const TestimonialsSection = () => {
               {clientMedia.map((media, index) => (
                 <CarouselItem
                   key={index}
-                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                  className="pl-2 md:pl-4 basis-full md:basis-1/2"
                 >
                   <div className="overflow-hidden rounded-xl shadow-lg bg-black">
                     {media.type === "image" ? (
