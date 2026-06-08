@@ -46,6 +46,16 @@ const parseCurrencyNumber = (value: string) => {
   return numbers ? Number(numbers) / 100 : null;
 };
 
+const getCookieValue = (name: string) => {
+  if (typeof document === "undefined") return undefined;
+
+  const cookie = document.cookie
+    .split("; ")
+    .find((item) => item.startsWith(`${name}=`));
+
+  return cookie ? decodeURIComponent(cookie.split("=").slice(1).join("=")) : undefined;
+};
+
 const validateLeadWebhookData = (data: LeadWebhookData) => {
   if (!data.propertyType) return "Selecione o tipo de bem.";
   if (!data.acquisitionTime) return "Selecione o tempo de aquisicao.";
@@ -102,6 +112,8 @@ export const buildLeadWebhookPayload = (
     source_url: window.location.href,
     user_agent: navigator.userAgent,
     event_id: eventId,
+    fbp: getCookieValue("_fbp"),
+    fbc: getCookieValue("_fbc"),
   };
 };
 

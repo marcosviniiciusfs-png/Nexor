@@ -4,3 +4,5 @@ compatibility_date = "2026-06-03"
 
 [vars]
 LEAD_WEBHOOK_URL = "https://webhook.simulead.com.br/webhook/e4ce4839-bb0c-4ade-ac79-7f5325be5104"
+META_PIXEL_ID = "1002345206086674"
+META_GRAPH_API_VERSION = "v25.0"

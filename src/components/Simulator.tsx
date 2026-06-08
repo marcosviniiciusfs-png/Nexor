@@ -28,6 +28,23 @@ interface SimulatorData {
   whatsapp: string;
 }
 
+declare global {
+  interface Window {
+    fbq?: (
+      method: "track",
+      eventName: string,
+      params?: Record<string, unknown>,
+      options?: { eventID?: string }
+    ) => void;
+  }
+}
+
+const trackMetaLead = (eventId: string) => {
+  if (typeof window === "undefined" || typeof window.fbq !== "function") return;
+
+  window.fbq("track", "Lead", {}, { eventID: eventId });
+};
+
 const Simulator = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -149,6 +166,8 @@ const Simulator = () => {
       if (!leadWebhookResult.success) {
         throw new Error(leadWebhookResult.error || "Erro ao enviar lead.");
       }
+
+      trackMetaLead(leadEventId);
 
       toast({
         title: "Simulação enviada",
