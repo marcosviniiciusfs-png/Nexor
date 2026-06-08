@@ -19,7 +19,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center gap-4 mt-2">
               <a
-                href="https://www.facebook.com/profile.php?id=61579785880482#"
+                href="https://www.facebook.com/profile.php?id=61590892280481#"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-brand-blue transition-colors"
@@ -28,7 +28,7 @@ const Footer = () => {
                 <img src={facebookIcon} alt="Facebook" className="w-8 h-8" />
               </a>
               <a
-                href="https://www.instagram.com/grupouniao"
+                href="https://www.instagram.com/grupouniao_sf/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-brand-blue transition-colors"
@@ -46,8 +46,7 @@ const Footer = () => {
                 <Phone className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div>
                   <p className="font-semibold">WhatsApp</p>
-                  <p className="text-white/90">(93) 99190-5464</p>
-                  <p className="text-white/90">(93) 99144-2447</p>
+                  <p className="text-white/90">(15) 9 9767-1986</p>
                 </div>
               </div>
             </div>
@@ -60,8 +59,10 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div>
                   <p className="text-white/90">
-                    Tv Dom Amando, Centro, N 573<br />
-                    esquina com São Sebastião
+                    Rua José Maria Barbosa, n° 31<br />
+                    Edifício Torre Sul, Sala 94<br />
+                    Jardim Portal da Colina<br />
+                    Sorocaba - SP, CEP: 18047-380
                   </p>
                 </div>
               </div>
