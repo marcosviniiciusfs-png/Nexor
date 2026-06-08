@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect, useState } from "react";
+import { type CSSProperties, useRef, useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,10 @@ const clientMedia: ClientMedia[] = [
     label: "Video de cliente contemplado 2",
   },
 ];
+
+const mediaFrameStyle = {
+  aspectRatio: "1920 / 1024",
+} satisfies CSSProperties;
 
 const TestimonialsSection = () => {
   const [api, setApi] = useState<CarouselApi>();
@@ -108,19 +112,19 @@ const TestimonialsSection = () => {
                   key={index}
                   className="pl-2 md:pl-4 basis-full md:basis-1/2"
                 >
-                  <div className="overflow-hidden rounded-xl shadow-lg bg-black">
+                  <div className="overflow-hidden rounded-xl shadow-lg bg-black" style={mediaFrameStyle}>
                     {media.type === "image" ? (
                       <img
                         src={media.src}
                         alt={media.label}
                         loading="lazy"
-                        className="w-full h-64 md:h-80 object-cover object-top transition-transform duration-300 hover:scale-105"
+                        className="h-full w-full object-contain transition-transform duration-300 hover:scale-105"
                       />
                     ) : (
                       <video
                         src={media.src}
                         aria-label={media.label}
-                        className="w-full h-64 md:h-80 object-cover bg-black"
+                        className="h-full w-full object-contain bg-black"
                         controls
                         playsInline
                         preload="metadata"
