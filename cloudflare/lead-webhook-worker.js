@@ -265,19 +265,6 @@ export default {
 
       const metaCapi = await sendMetaCapi(leadData, request, env);
 
-      if (!metaCapi.success) {
-        return jsonResponse(
-          {
-            success: false,
-            error: metaCapi.error || "Meta CAPI failed",
-            leadWebhook,
-            metaCapi,
-            traceId,
-          },
-          502
-        );
-      }
-
       return jsonResponse({ success: true, leadWebhook, metaCapi, traceId });
     } catch (error) {
       return jsonResponse(
