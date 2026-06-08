@@ -1,7 +1,6 @@
-name = "grupo-uniao-meta-capi"
-main = "meta-capi-worker.js"
+name = "grupo-uniao-lead-webhook"
+main = "lead-webhook-worker.js"
 compatibility_date = "2026-06-03"
 
 [vars]
-META_PIXEL_ID = "2864957293877250"
-META_GRAPH_API_VERSION = "v25.0"
+LEAD_WEBHOOK_URL = "https://webhook.simulead.com.br/webhook/e4ce4839-bb0c-4ade-ac79-7f5325be5104"

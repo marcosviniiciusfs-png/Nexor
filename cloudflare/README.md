@@ -1,28 +1,18 @@
-# Meta CAPI Cloudflare Worker
+# Lead Webhook Cloudflare Worker
 
-This Worker receives the lead payload from the simulator, forwards it to the
-external CRM webhook, and sends the server-side `Lead` event to Meta Conversions
-API when the Meta token is configured.
+This Worker receives the lead payload from the simulator and forwards it to the
+external Simulead webhook with the required Authorization header.
 
-Required secrets for the CRM webhook:
+Required secret for the webhook:
 
 ```bash
-wrangler secret put LEAD_WEBHOOK_URL
 wrangler secret put LEAD_WEBHOOK_TOKEN
 ```
 
-Optional secret for Meta Conversions API:
+Required variable:
 
 ```bash
-wrangler secret put META_CAPI_ACCESS_TOKEN
-```
-
-Optional variables:
-
-```bash
-META_PIXEL_ID=2864957293877250
-META_GRAPH_API_VERSION=v25.0
-META_TEST_EVENT_CODE=<Meta test event code>
+LEAD_WEBHOOK_URL=https://webhook.simulead.com.br/webhook/e4ce4839-bb0c-4ade-ac79-7f5325be5104
 ```
 
 After deploying the Worker, set the site build variable:

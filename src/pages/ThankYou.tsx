@@ -16,10 +16,6 @@ const ThankYou = () => {
     } catch {
       // Ignore storage errors.
     }
-
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq("track", "PageView");
-    }
   }, [canShowThankYou]);
 
   if (!canShowThankYou) {

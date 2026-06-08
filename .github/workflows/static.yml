@@ -37,10 +37,7 @@ jobs:
           npm run build
           cp dist/index.html dist/404.html
         env:
-          VITE_LEAD_WEBHOOK_URL: ${{ secrets.VITE_LEAD_WEBHOOK_URL }}
           VITE_FORM_WEBHOOK_PROXY_URL: ${{ secrets.VITE_FORM_WEBHOOK_PROXY_URL }}
-          VITE_META_PIXEL_ID: ${{ secrets.VITE_META_PIXEL_ID }}
-          VITE_META_CAPI_ENDPOINT: ${{ secrets.VITE_META_CAPI_ENDPOINT }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

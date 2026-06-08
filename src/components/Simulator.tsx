@@ -7,8 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import InputMask from "react-input-mask";
-import { sendLeadWebhook } from "@/services/leadWebhook";
-import { createLeadEventId } from "@/services/tracking";
+import { createLeadEventId, sendLeadWebhook } from "@/services/leadWebhook";
 import {
   Select,
   SelectContent,
@@ -145,8 +144,6 @@ const Simulator = () => {
     };
 
     try {
-      console.log("Enviando lead para webhook:", leadData);
-
       const leadWebhookResult = await sendLeadWebhook(leadData, leadEventId);
 
       if (!leadWebhookResult.success) {
