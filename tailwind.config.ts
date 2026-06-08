@@ -51,6 +51,11 @@ export default {
         orange: {
           DEFAULT: "hsl(var(--orange))",
         },
+        brand: {
+          blue: "hsl(var(--brand-blue) / <alpha-value>)",
+          "blue-hover": "hsl(var(--brand-blue-hover) / <alpha-value>)",
+          "blue-soft": "hsl(var(--brand-blue-soft) / <alpha-value>)",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

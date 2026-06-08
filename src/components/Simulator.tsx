@@ -265,8 +265,8 @@ const Simulator = () => {
                 onClick={() => setFormData({ ...formData, hasDownPayment: "Sim" })}
                 className={`p-4 rounded-xl border-2 transition-all ${
                   formData.hasDownPayment === "Sim"
-                    ? "border-orange bg-orange/5 text-orange"
-                    : "border-border hover:border-orange/50 text-muted-foreground"
+                    ? "border-brand-blue bg-brand-blue/5 text-brand-blue"
+                    : "border-border hover:border-brand-blue/50 text-muted-foreground"
                 }`}
               >
                 <span className="text-base font-normal">Sim</span>
@@ -277,7 +277,7 @@ const Simulator = () => {
                 className={`p-4 rounded-xl border-2 transition-all ${
                   formData.hasDownPayment === "Não"
                     ? "border-foreground bg-foreground/5 text-foreground"
-                    : "border-border hover:border-orange/50 text-muted-foreground"
+                    : "border-border hover:border-brand-blue/50 text-muted-foreground"
                 }`}
               >
                 <span className="text-base font-normal">Não</span>
@@ -390,7 +390,7 @@ const Simulator = () => {
             </p>
           </div>
 
-          <div className="bg-card rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+          <div className="bg-card rounded-2xl border border-brand-blue/10 shadow-lg p-6 md:p-8 space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>Progresso</span>
@@ -418,7 +418,7 @@ const Simulator = () => {
                 <Button
                   onClick={handleNext}
                   disabled={!canProceed()}
-                  className="flex items-center gap-2 bg-orange hover:bg-orange/90"
+                  className="flex items-center gap-2 bg-brand-blue hover:bg-brand-blue-hover"
                 >
                   Próximo
                   <ChevronRight className="w-4 h-4" />
@@ -427,7 +427,7 @@ const Simulator = () => {
                 <Button
                   onClick={handleFinish}
                   disabled={!canProceed() || isSubmitting}
-                  className="bg-orange hover:bg-orange/90"
+                  className="bg-brand-blue hover:bg-brand-blue-hover"
                 >
                   {isSubmitting ? "Enviando..." : "Finalizar Simulação"}
                 </Button>

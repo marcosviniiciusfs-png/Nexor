@@ -15,7 +15,7 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
   ];
 
   return (
-    <section id="inicio" className="pt-24 pb-16 bg-primary/10">
+    <section id="inicio" className="pt-24 pb-16 bg-background border-b border-brand-blue/10">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
@@ -30,7 +30,7 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-brand-blue flex items-center justify-center flex-shrink-0 shadow-sm">
                     <Check className="w-4 h-4 text-primary-foreground" />
                   </div>
                   <span className="text-foreground">{benefit}</span>
@@ -41,7 +41,7 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
             <Button 
               onClick={onSimulateClick}
               size="lg"
-              className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold text-lg px-8 py-6 rounded-lg shadow-lg hover:shadow-xl transition-all"
+              className="bg-brand-blue hover:bg-brand-blue-hover text-primary-foreground font-semibold text-lg px-8 py-6 rounded-lg shadow-lg shadow-brand-blue/20 hover:shadow-xl transition-all"
             >
               Simular crédito agora
             </Button>
@@ -51,7 +51,7 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
             <img 
               src={heroBanner} 
               alt="Imóveis e Veículos" 
-              className="w-full h-auto rounded-2xl shadow-2xl"
+              className="w-full h-auto rounded-2xl border border-brand-blue/20 shadow-2xl"
             />
           </div>
         </div>

@@ -35,7 +35,7 @@ const BenefitsSection = () => {
           {benefits.map((benefit, index) => (
             <div
               key={index}
-              className="bg-card rounded-xl p-8 shadow-md hover:shadow-xl transition-all hover:-translate-y-1 animate-fade-in"
+              className="bg-card rounded-xl border border-border p-8 shadow-md hover:border-brand-blue/30 hover:shadow-xl transition-all hover:-translate-y-1 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="w-16 h-16 rounded-full bg-orange/10 flex items-center justify-center mb-6 mx-auto">

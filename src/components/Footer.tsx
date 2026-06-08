@@ -4,7 +4,7 @@ import facebookIcon from "@/assets/facebook.png";
 
 const Footer = () => {
   return (
-    <footer id="contato" className="bg-[hsl(var(--header-footer))] text-white">
+    <footer id="contato" className="bg-[hsl(var(--header-footer))] border-t-4 border-brand-blue text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
@@ -22,7 +22,7 @@ const Footer = () => {
                 href="https://www.facebook.com/profile.php?id=61579785880482#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-white/80 transition-colors"
+                className="text-white hover:text-brand-blue transition-colors"
                 aria-label="Facebook do Grupo União"
               >
                 <img src={facebookIcon} alt="Facebook" className="w-8 h-8" />
@@ -31,7 +31,7 @@ const Footer = () => {
                 href="https://www.instagram.com/grupouniao"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-white/80 transition-colors"
+                className="text-white hover:text-brand-blue transition-colors"
                 aria-label="Instagram do Grupo União"
               >
                 <Instagram className="w-8 h-8" />
@@ -79,7 +79,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/20 pt-8">
+        <div className="border-t border-brand-blue/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/90 text-sm">
               © 2026 Grupo União. Todos os direitos reservados.

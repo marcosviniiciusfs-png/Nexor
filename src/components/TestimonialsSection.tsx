@@ -114,7 +114,7 @@ const TestimonialsSection = () => {
             variant="outline"
             size="icon"
             onClick={scrollPrev}
-            className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/80 backdrop-blur-sm hidden md:flex"
+            className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10 rounded-full border-brand-blue/30 bg-background/80 backdrop-blur-sm hover:bg-brand-blue hover:text-white hidden md:flex"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
@@ -123,7 +123,7 @@ const TestimonialsSection = () => {
             variant="outline"
             size="icon"
             onClick={scrollNext}
-            className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10 rounded-full bg-background/80 backdrop-blur-sm hidden md:flex"
+            className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10 rounded-full border-brand-blue/30 bg-background/80 backdrop-blur-sm hover:bg-brand-blue hover:text-white hidden md:flex"
           >
             <ChevronRight className="w-5 h-5" />
           </Button>
@@ -177,7 +177,7 @@ const TestimonialsSection = () => {
                 onClick={() => api?.scrollTo(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === current
-                    ? "w-8 bg-primary"
+                    ? "w-8 bg-brand-blue"
                     : "w-2 bg-border hover:bg-muted-foreground"
                 }`}
                 aria-label={`Ir para slide ${index + 1}`}
@@ -191,7 +191,7 @@ const TestimonialsSection = () => {
               variant="outline"
               size="icon"
               onClick={scrollPrev}
-              className="rounded-full"
+              className="rounded-full border-brand-blue/30 hover:bg-brand-blue hover:text-white"
             >
               <ChevronLeft className="w-5 h-5" />
             </Button>
@@ -199,7 +199,7 @@ const TestimonialsSection = () => {
               variant="outline"
               size="icon"
               onClick={scrollNext}
-              className="rounded-full"
+              className="rounded-full border-brand-blue/30 hover:bg-brand-blue hover:text-white"
             >
               <ChevronRight className="w-5 h-5" />
             </Button>

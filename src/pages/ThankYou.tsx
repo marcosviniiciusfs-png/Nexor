@@ -30,8 +30,8 @@ const ThankYou = () => {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-md w-full text-center space-y-6">
         <div className="flex justify-center">
-          <div className="rounded-full bg-primary/10 p-6">
-            <CheckCircle className="w-16 h-16 text-primary" />
+          <div className="rounded-full bg-brand-blue/10 p-6">
+            <CheckCircle className="w-16 h-16 text-brand-blue" />
           </div>
         </div>
 
@@ -46,7 +46,7 @@ const ThankYou = () => {
 
         <div className="pt-4">
           <Link to="/">
-            <Button className="bg-primary hover:bg-primary-hover">
+            <Button className="bg-brand-blue hover:bg-brand-blue-hover">
               Voltar para o inicio
             </Button>
           </Link>

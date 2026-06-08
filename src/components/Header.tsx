@@ -16,7 +16,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[hsl(var(--header-footer))] shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[hsl(var(--header-footer))] border-b border-brand-blue/40 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-14 w-14 flex items-center">
@@ -32,19 +32,19 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-6">
           <button
             onClick={() => scrollToSection("simulador")}
-            className="text-white hover:text-white/80 transition-colors"
+            className="text-white hover:text-brand-blue transition-colors"
           >
             Simulador
           </button>
           <button
             onClick={() => scrollToSection("beneficios")}
-            className="text-white hover:text-white/80 transition-colors"
+            className="text-white hover:text-brand-blue transition-colors"
           >
             Beneficios
           </button>
           <button
             onClick={() => scrollToSection("contato")}
-            className="text-white hover:text-white/80 transition-colors"
+            className="text-white hover:text-brand-blue transition-colors"
           >
             Contato
           </button>
@@ -54,7 +54,7 @@ const Header = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-white hover:bg-white/10"
+          className="md:hidden text-white hover:bg-brand-blue/20"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -63,23 +63,23 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-[hsl(var(--header-footer))]">
+        <div className="md:hidden bg-[hsl(var(--header-footer))] border-t border-brand-blue/30">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
             <button
               onClick={() => scrollToSection("simulador")}
-              className="text-white hover:text-white/80 transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue transition-colors text-left py-2"
             >
               Simulador
             </button>
             <button
               onClick={() => scrollToSection("beneficios")}
-              className="text-white hover:text-white/80 transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue transition-colors text-left py-2"
             >
               Beneficios
             </button>
             <button
               onClick={() => scrollToSection("contato")}
-              className="text-white hover:text-white/80 transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue transition-colors text-left py-2"
             >
               Contato
             </button>

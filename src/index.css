@@ -35,13 +35,13 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 0% 0%;
+    --ring: 222 85% 28%;
 
     --radius: 0.75rem;
     
     --gradient-primary: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 10%));
     --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 16px rgba(212, 175, 55, 0.22);
+    --shadow-hover: 0 4px 16px rgba(15, 58, 140, 0.2);
 
     --sidebar-background: 0 0% 98%;
 
@@ -61,6 +61,9 @@ All colors MUST be HSL.
     
     --header-footer: 0 0% 0%;
     --orange: 45 68% 49%;
+    --brand-blue: 222 85% 28%;
+    --brand-blue-hover: 222 88% 22%;
+    --brand-blue-soft: 218 72% 94%;
   }
 
   .dark {
@@ -91,7 +94,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 25%;
     --input: 0 0% 25%;
-    --ring: 45 68% 49%;
+    --ring: 222 85% 58%;
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 0 0% 0%;
@@ -100,6 +103,9 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 95%;
     --sidebar-border: 0 0% 25%;
     --sidebar-ring: 45 68% 49%;
+    --brand-blue: 222 85% 58%;
+    --brand-blue-hover: 222 88% 48%;
+    --brand-blue-soft: 222 44% 18%;
   }
 }
 
