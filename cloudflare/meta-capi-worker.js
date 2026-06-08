@@ -73,7 +73,7 @@ const buildExternalLeadPayload = (leadData) => ({
   parcela_ideal: leadData.parcela_ideal,
   cidade: leadData.cidade,
   tempo_aquisicao: leadData.tempo_aquisicao,
-  origem: leadData.origem || "simulador_grupo_mb",
+  origem: leadData.origem || "simulador_grupo_uniao",
   data_entrada: leadData.data_entrada || new Date().toISOString().split("T")[0],
   event_id: leadData.event_id,
   source_url: leadData.source_url,
@@ -142,7 +142,7 @@ const sendMetaCapiLead = async (request, env, leadData) => {
   if (leadData.fbc) userData.fbc = leadData.fbc;
 
   const customData = {
-    content_name: "Simulador Grupo MB Empreendimentos",
+    content_name: "Simulador Grupo União",
     content_category: leadData.tipo_bem,
     currency: "BRL",
     tipo: "IMOVEL",

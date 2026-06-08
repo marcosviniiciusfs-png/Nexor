@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import grupoMbLogo from "@/assets/grupo-mb-logo.png";
+import grupoUniaoLogo from "@/assets/grupo-mb-logo.png";
 
 
 const Header = () => {
@@ -21,8 +21,8 @@ const Header = () => {
         <div className="flex items-center gap-2">
           <div className="h-12 w-28 overflow-visible flex items-center">
             <img
-              src={grupoMbLogo}
-              alt="Grupo MB Empreendimentos"
+              src={grupoUniaoLogo}
+              alt="Grupo União"
               className="h-12 w-auto max-w-none origin-left scale-[2.25]"
             />
           </div>

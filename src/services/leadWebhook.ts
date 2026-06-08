@@ -65,7 +65,7 @@ export const buildLeadWebhookPayload = (
   parcela_ideal: data.monthlyPayment,
   cidade: data.city.trim(),
   tempo_aquisicao: data.acquisitionTime,
-  origem: "simulador_grupo_mb",
+  origem: "simulador_grupo_uniao",
   data_entrada: new Date().toISOString().split("T")[0],
   source_url: window.location.href,
   user_agent: navigator.userAgent,

@@ -1,4 +1,4 @@
-name = "grupo-mb-meta-capi"
+name = "grupo-uniao-meta-capi"
 main = "meta-capi-worker.js"
 compatibility_date = "2026-06-03"
 

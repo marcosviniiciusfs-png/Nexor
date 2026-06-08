@@ -1,5 +1,5 @@
 import { Phone, MapPin, Clock, Instagram } from "lucide-react";
-import grupoMbLogo from "@/assets/grupo-mb-logo.png";
+import grupoUniaoLogo from "@/assets/grupo-mb-logo.png";
 import facebookIcon from "@/assets/facebook.png";
 
 const Footer = () => {
@@ -11,8 +11,8 @@ const Footer = () => {
             <div className="flex flex-col items-center md:items-start gap-2 mb-4">
               <div className="h-20 w-40 overflow-visible flex items-center justify-center md:justify-start">
                 <img
-                  src={grupoMbLogo}
-                  alt="Grupo MB Empreendimentos"
+                  src={grupoUniaoLogo}
+                  alt="Grupo União"
                   className="h-20 w-auto max-w-none origin-center md:origin-left scale-[2.25]"
                 />
               </div>
@@ -23,16 +23,16 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors"
-                aria-label="Facebook do Grupo MB Empreendimentos"
+                aria-label="Facebook do Grupo União"
               >
                 <img src={facebookIcon} alt="Facebook" className="w-8 h-8" />
               </a>
               <a
-                href="https://www.instagram.com/grupombempreendimentos"
+                href="https://www.instagram.com/grupouniao"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-white/80 transition-colors"
-                aria-label="Instagram do Grupo MB Empreendimentos"
+                aria-label="Instagram do Grupo União"
               >
                 <Instagram className="w-8 h-8" />
               </a>
@@ -82,7 +82,7 @@ const Footer = () => {
         <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/90 text-sm">
-              © 2026 Grupo MB Empreendimentos. Todos os direitos reservados.
+              © 2026 Grupo União. Todos os direitos reservados.
             </p>
             <div className="flex gap-6 text-sm">
               <button className="text-white/90 hover:text-white transition-colors">
