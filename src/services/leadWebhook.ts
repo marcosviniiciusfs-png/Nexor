@@ -2,6 +2,7 @@ export type LeadWebhookData = {
   fullName: string;
   whatsapp: string;
   creditAmount: string;
+  limitedConditionsInterest: string;
   hasDownPayment: string;
   downPaymentAmount: string;
   monthlyPayment: string;
@@ -16,6 +17,7 @@ type LeadWebhookPayload = {
   whatsapp: string;
   tipo: "IMOVEL";
   tipo_bem: string;
+  interesse_condicoes_limitadas: string;
   valor_pretendido: string;
   possui_entrada: string;
   valor_entrada: string;
@@ -58,6 +60,7 @@ const getCookieValue = (name: string) => {
 
 const validateLeadWebhookData = (data: LeadWebhookData) => {
   if (!data.propertyType) return "Selecione o tipo de bem.";
+  if (!data.limitedConditionsInterest) return "Informe se tem interesse nas condições limitadas.";
   if (!data.acquisitionTime) return "Selecione o tempo de aquisicao.";
   if (!data.creditAmount) return "Informe o valor pretendido.";
   if (!data.hasDownPayment) return "Informe se possui valor de entrada.";
@@ -98,6 +101,7 @@ export const buildLeadWebhookPayload = (
     whatsapp: data.whatsapp,
     tipo: "IMOVEL",
     tipo_bem: data.propertyType,
+    interesse_condicoes_limitadas: data.limitedConditionsInterest,
     valor_pretendido: data.creditAmount,
     valor_pretendido_numero: parseCurrencyNumber(data.creditAmount),
     possui_entrada: data.hasDownPayment,

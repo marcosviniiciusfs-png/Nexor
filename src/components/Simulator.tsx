@@ -18,6 +18,7 @@ import {
 
 interface SimulatorData {
   propertyType: string;
+  limitedConditionsInterest: string;
   acquisitionTime: string;
   creditAmount: string;
   hasDownPayment: string;
@@ -52,6 +53,7 @@ const Simulator = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState<SimulatorData>({
     propertyType: "",
+    limitedConditionsInterest: "",
     acquisitionTime: "",
     creditAmount: "",
     hasDownPayment: "",
@@ -62,7 +64,7 @@ const Simulator = () => {
     whatsapp: ""
   });
 
-  const totalSteps = 8;
+  const totalSteps = 9;
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   const formatCurrency = (value: string) => {
@@ -82,23 +84,25 @@ const Simulator = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 0: return formData.propertyType !== "";
-      case 1: return formData.acquisitionTime !== "";
-      case 2: return formData.creditAmount !== "";
-      case 3: 
+      case 1: return formData.limitedConditionsInterest !== "";
+      case 2: return formData.acquisitionTime !== "";
+      case 3: return formData.creditAmount !== "";
+      case 4:
         if (formData.hasDownPayment === "Sim") {
           return formData.downPaymentAmount !== "";
         }
         return formData.hasDownPayment !== "";
-      case 4: return formData.monthlyPayment !== "";
-      case 5: return formData.city.trim() !== "";
-      case 6: return formData.fullName.trim() !== "";
-      case 7: return formData.whatsapp.replace(/\D/g, "").length === 11;
+      case 5: return formData.monthlyPayment !== "";
+      case 6: return formData.city.trim() !== "";
+      case 7: return formData.fullName.trim() !== "";
+      case 8: return formData.whatsapp.replace(/\D/g, "").length === 11;
       default: return false;
     }
   };
 
   const validateFormData = () => {
     if (!formData.propertyType) return "Selecione o tipo de bem.";
+    if (!formData.limitedConditionsInterest) return "Informe se tem interesse nas condições limitadas.";
     if (!formData.acquisitionTime) return "Selecione o tempo de aquisicao.";
     if (!formData.creditAmount) return "Informe o valor pretendido.";
     if (!formData.hasDownPayment) return "Informe se possui valor de entrada.";
@@ -116,7 +120,7 @@ const Simulator = () => {
   };
 
   const handleNext = () => {
-    if (currentStep === 3 && formData.hasDownPayment === "Não") {
+    if (currentStep === 4 && formData.hasDownPayment === "Não") {
       setFormData({ ...formData, downPaymentAmount: "" });
     }
     if (currentStep < totalSteps - 1) {
@@ -152,6 +156,7 @@ const Simulator = () => {
       fullName: formData.fullName.trim(),
       whatsapp: formData.whatsapp,
       creditAmount: formData.creditAmount,
+      limitedConditionsInterest: formData.limitedConditionsInterest,
       hasDownPayment: formData.hasDownPayment,
       downPaymentAmount: downPaymentValue,
       monthlyPayment: formData.monthlyPayment,
@@ -176,6 +181,7 @@ const Simulator = () => {
 
       setFormData({
         propertyType: "",
+        limitedConditionsInterest: "",
         acquisitionTime: "",
         creditAmount: "",
         hasDownPayment: "",
@@ -234,6 +240,39 @@ const Simulator = () => {
         return (
           <div className="space-y-4">
             <Label className="text-lg font-semibold text-primary text-center block mb-6">
+              Tem interesse de receber contato para participar das condições limitadas?
+            </Label>
+            <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, limitedConditionsInterest: "Sim" })}
+                className={`p-4 rounded-xl border-2 transition-all ${
+                  formData.limitedConditionsInterest === "Sim"
+                    ? "border-brand-blue bg-brand-blue/5 text-brand-blue"
+                    : "border-border hover:border-brand-blue/50 text-muted-foreground"
+                }`}
+              >
+                <span className="text-base font-normal">Sim</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, limitedConditionsInterest: "Não" })}
+                className={`p-4 rounded-xl border-2 transition-all ${
+                  formData.limitedConditionsInterest === "Não"
+                    ? "border-foreground bg-foreground/5 text-foreground"
+                    : "border-border hover:border-brand-blue/50 text-muted-foreground"
+                }`}
+              >
+                <span className="text-base font-normal">Não</span>
+              </button>
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-4">
+            <Label className="text-lg font-semibold text-primary text-center block mb-6">
               Em até quanto tempo você deseja adquirir o seu bem?
             </Label>
             <Select
@@ -253,7 +292,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 2:
+      case 3:
         return (
           <div className="space-y-4">
             <Label htmlFor="creditAmount" className="text-lg font-semibold text-primary text-center block mb-6">
@@ -269,7 +308,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-4">
             <Label className="text-lg font-semibold text-primary text-center block mb-6">
@@ -317,7 +356,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 4:
+      case 5:
         return (
           <div className="space-y-4">
             <Label htmlFor="monthlyPayment" className="text-lg font-semibold text-primary text-center block mb-6">
@@ -333,7 +372,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 5:
+      case 6:
         return (
           <div className="space-y-4">
             <Label htmlFor="city" className="text-lg font-semibold text-primary text-center block mb-6">
@@ -349,7 +388,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 6:
+      case 7:
         return (
           <div className="space-y-4">
             <Label htmlFor="fullName" className="text-lg font-semibold text-primary text-center block mb-6">
@@ -365,7 +404,7 @@ const Simulator = () => {
           </div>
         );
 
-      case 7:
+      case 8:
         return (
           <div className="space-y-4">
             <Label htmlFor="whatsapp" className="text-lg font-semibold text-primary text-center block mb-6">
