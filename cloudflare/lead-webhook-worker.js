@@ -111,6 +111,159 @@ const buildLeadPayload = (leadData) => ({
   user_agent: leadData.user_agent,
 });
 
+const buildLeadDestinations = (env) => {
+  const destinations = [];
+
+  if (env.LEAD_WEBHOOK_URL) {
+    destinations.push({
+      name: "simulead",
+      url: env.LEAD_WEBHOOK_URL,
+      token: env.LEAD_WEBHOOK_TOKEN,
+      requiresToken: true,
+    });
+  }
+
+  if (env.HURTZ_LEAD_WEBHOOK_URL) {
+    destinations.push({
+      name: "hurtz_crm",
+      url: env.HURTZ_LEAD_WEBHOOK_URL,
+      headers: env.HURTZ_WEBHOOK_SECRET
+        ? {
+            "X-Hurtz-Webhook-Secret": env.HURTZ_WEBHOOK_SECRET,
+          }
+        : undefined,
+    });
+  }
+
+  return destinations;
+};
+
+const trimSlashes = (value) => String(value || "").replace(/^\/+|\/+$/g, "");
+
+const sanitizePathSegment = (value) => {
+  const normalized = normalizeForHash(value).replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return normalized || "lead";
+};
+
+const getLeadStorageConfig = (env) => {
+  return {
+    directory: trimSlashes(env.GITHUB_LEADS_DIRECTORY || "leads-cadastrados"),
+  };
+};
+
+const buildLeadStoragePath = (leadPayload, config, storedAt, traceId) => {
+  const date = storedAt.slice(0, 10);
+  const timestamp = storedAt.replace(/[:.]/g, "-");
+  const leadId = sanitizePathSegment(leadPayload.event_id || traceId || crypto.randomUUID());
+
+  return `${config.directory}/${date}/${timestamp}-${leadId}.json`;
+};
+
+const queueLeadForGitHubExport = async (leadPayload, env, traceId) => {
+  if (!env.LEADS_KV) {
+    return { success: false, error: "LEADS_KV binding is not configured" };
+  }
+
+  const config = getLeadStorageConfig(env);
+  const storedAt = new Date().toISOString();
+  const path = buildLeadStoragePath(leadPayload, config, storedAt, traceId);
+  const key = `pending/${path}`;
+  const record = {
+    schema_version: 1,
+    stored_at: storedAt,
+    trace_id: traceId,
+    source: "simulador_grupo_uniao",
+    path,
+    lead: leadPayload,
+  };
+
+  try {
+    await env.LEADS_KV.put(key, JSON.stringify(record), {
+      metadata: {
+        path,
+        stored_at: storedAt,
+        trace_id: traceId,
+      },
+    });
+
+    return {
+      success: true,
+      queued: true,
+      path,
+      key,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      path,
+      error: error instanceof Error ? error.message : "Unknown lead queue error",
+    };
+  }
+};
+
+const getLeadExportToken = (request) => {
+  const authorization = request.headers.get("Authorization") || "";
+  const bearerToken = authorization.match(/^Bearer\s+(.+)$/i)?.[1];
+  if (bearerToken) return bearerToken;
+
+  return new URL(request.url).searchParams.get("token");
+};
+
+const isLeadExportAuthorized = (request, env) => {
+  const token = getLeadExportToken(request);
+  return Boolean(env.LEAD_EXPORT_TOKEN && token && token === env.LEAD_EXPORT_TOKEN);
+};
+
+const listPendingLeadExports = async (env) => {
+  const list = await env.LEADS_KV.list({ prefix: "pending/", limit: 1000 });
+  const items = [];
+
+  for (const item of list.keys) {
+    const record = await env.LEADS_KV.get(item.name, "json");
+    if (!record) continue;
+
+    items.push({
+      key: item.name,
+      path: record.path || item.name.replace(/^pending\//, ""),
+      content: record,
+    });
+  }
+
+  return items;
+};
+
+const handleLeadExport = async (request, env) => {
+  if (!env.LEADS_KV) {
+    return jsonResponse({ success: false, error: "LEADS_KV binding is not configured" }, 500);
+  }
+
+  if (!isLeadExportAuthorized(request, env)) {
+    return jsonResponse({ success: false, error: "Unauthorized" }, 401);
+  }
+
+  if (request.method === "GET") {
+    const items = await listPendingLeadExports(env);
+    return jsonResponse({ success: true, items, count: items.length });
+  }
+
+  if (request.method === "POST") {
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonResponse({ success: false, error: "Invalid JSON payload" }, 400);
+    }
+
+    const keys = Array.isArray(body.keys) ? body.keys.filter((key) => typeof key === "string" && key.startsWith("pending/")) : [];
+
+    await Promise.all(keys.map((key) => env.LEADS_KV.delete(key)));
+
+    return jsonResponse({ success: true, deleted: keys.length });
+  }
+
+  return jsonResponse({ success: false, error: "Method not allowed" }, 405);
+};
+
 const buildMetaCapiPayload = async (leadData, request) => {
   const { firstName, lastName } = splitName(leadData.nome);
   const phone = normalizePhoneForMeta(leadData.telefone || leadData.whatsapp);
@@ -174,69 +327,113 @@ const validateLeadPayload = (leadData) => {
   return null;
 };
 
-const sendLeadWebhook = async (leadData, env) => {
-  if (!env.LEAD_WEBHOOK_URL) {
-    return { success: false, error: "LEAD_WEBHOOK_URL is not configured" };
+const sendLeadDestination = async (destination, leadPayload) => {
+  if (!destination.url) {
+    return { success: false, name: destination.name, error: "Webhook URL is not configured" };
   }
 
-  if (!env.LEAD_WEBHOOK_TOKEN) {
-    return { success: false, error: "LEAD_WEBHOOK_TOKEN is not configured" };
+  if (destination.requiresToken && !destination.token) {
+    return { success: false, name: destination.name, error: "LEAD_WEBHOOK_TOKEN is not configured" };
   }
 
-  const leadPayload = buildLeadPayload(leadData);
-  const response = await fetch(env.LEAD_WEBHOOK_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.LEAD_WEBHOOK_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(leadPayload),
-  });
+  const missingSecret = destination.requiredSecrets?.find((secret) => !secret.value);
+  if (missingSecret) {
+    return { success: false, name: destination.name, error: `${missingSecret.name} is not configured` };
+  }
 
-  const data = await readResponseBody(response);
+  const headers = {
+    "Content-Type": "application/json",
+    ...(destination.headers || {}),
+  };
 
-  if (isPostMethodMismatch(response, data)) {
-    const getUrl = new URL(env.LEAD_WEBHOOK_URL);
-    appendQueryParams(getUrl, leadPayload);
+  if (destination.token) {
+    headers.Authorization = `Bearer ${destination.token}`;
+  }
 
-    const getResponse = await fetch(getUrl.toString(), {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${env.LEAD_WEBHOOK_TOKEN}`,
-      },
+  try {
+    const response = await fetch(destination.url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(leadPayload),
     });
-    const getData = await readResponseBody(getResponse);
 
-    if (!getResponse.ok) {
+    const data = await readResponseBody(response);
+
+    if (isPostMethodMismatch(response, data)) {
+      const getUrl = new URL(destination.url);
+      appendQueryParams(getUrl, leadPayload);
+
+      const getHeaders = {};
+      if (destination.token) {
+        getHeaders.Authorization = `Bearer ${destination.token}`;
+      }
+
+      const getResponse = await fetch(getUrl.toString(), {
+        method: "GET",
+        headers: getHeaders,
+      });
+      const getData = await readResponseBody(getResponse);
+
+      if (!getResponse.ok) {
+        return {
+          success: false,
+          name: destination.name,
+          status: getResponse.status,
+          data: getData,
+          method: "GET",
+          error:
+            getData && typeof getData === "object" && getData.message
+              ? String(getData.message)
+              : `Lead webhook error: ${getResponse.status}`,
+        };
+      }
+
+      return { success: true, name: destination.name, status: getResponse.status, data: getData, method: "GET" };
+    }
+
+    if (!response.ok) {
       return {
         success: false,
-        status: getResponse.status,
-        data: getData,
-        method: "GET",
+        name: destination.name,
+        status: response.status,
+        data,
+        method: "POST",
         error:
-          getData && typeof getData === "object" && getData.message
-            ? String(getData.message)
-            : `Lead webhook error: ${getResponse.status}`,
+          data && typeof data === "object" && data.message
+            ? String(data.message)
+            : `Lead webhook error: ${response.status}`,
       };
     }
 
-    return { success: true, status: getResponse.status, data: getData, method: "GET" };
-  }
-
-  if (!response.ok) {
+    return { success: true, name: destination.name, status: response.status, data, method: "POST" };
+  } catch (error) {
     return {
       success: false,
-      status: response.status,
-      data,
-      method: "POST",
-      error:
-        data && typeof data === "object" && data.message
-          ? String(data.message)
-          : `Lead webhook error: ${response.status}`,
+      name: destination.name,
+      error: error instanceof Error ? error.message : "Unknown webhook error",
+    };
+  }
+};
+
+const sendLeadWebhooks = async (leadPayload, env) => {
+  const destinations = buildLeadDestinations(env);
+
+  if (destinations.length === 0) {
+    return { success: false, error: "No lead webhooks are configured", results: [] };
+  }
+
+  const results = await Promise.all(destinations.map((destination) => sendLeadDestination(destination, leadPayload)));
+  const failed = results.filter((result) => !result.success);
+
+  if (failed.length > 0) {
+    return {
+      success: false,
+      results,
+      error: failed.map((result) => `${result.name}: ${result.error || `HTTP ${result.status}`}`).join("; "),
     };
   }
 
-  return { success: true, status: response.status, data, method: "POST" };
+  return { success: true, results };
 };
 
 const sendMetaCapi = async (leadData, request, env) => {
@@ -282,6 +479,11 @@ export default {
       return new Response(null, { headers: corsHeaders });
     }
 
+    const url = new URL(request.url);
+    if (url.pathname === "/lead-export") {
+      return handleLeadExport(request, env);
+    }
+
     if (request.method !== "POST") {
       return jsonResponse({ error: "Method not allowed" }, 405);
     }
@@ -301,23 +503,39 @@ export default {
         return jsonResponse({ error: validationError, traceId }, 400);
       }
 
-      const leadWebhook = await sendLeadWebhook(leadData, env);
+      const leadPayload = buildLeadPayload(leadData);
+      const leadWebhooks = await sendLeadWebhooks(leadPayload, env);
 
-      if (!leadWebhook.success) {
+      if (!leadWebhooks.success) {
         return jsonResponse(
           {
             success: false,
-            error: leadWebhook.error || "Lead webhook failed",
-            leadWebhook,
+            error: leadWebhooks.error || "Lead webhook failed",
+            leadWebhooks,
             traceId,
           },
           502
         );
       }
 
-      const metaCapi = await sendMetaCapi(leadData, request, env);
+      const githubStorage = await queueLeadForGitHubExport(leadPayload, env, traceId);
 
-      return jsonResponse({ success: true, leadWebhook, metaCapi, traceId });
+      if (!githubStorage.success) {
+        return jsonResponse(
+          {
+            success: false,
+            error: githubStorage.error || "GitHub lead queue failed",
+            leadWebhooks,
+            githubStorage,
+            traceId,
+          },
+          502
+        );
+      }
+
+      const metaCapi = await sendMetaCapi(leadPayload, request, env);
+
+      return jsonResponse({ success: true, leadWebhooks, githubStorage, metaCapi, traceId });
     } catch (error) {
       return jsonResponse(
         {
