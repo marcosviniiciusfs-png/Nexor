@@ -34,15 +34,20 @@ jobs:
           import urllib.request
 
           export_url = os.environ["LEAD_EXPORT_URL"]
-          export_token = os.environ["LEAD_EXPORT_TOKEN"]
+          export_token = os.environ["LEAD_EXPORT_TOKEN"].strip()
           headers = {
               "Authorization": f"Bearer {export_token}",
               "Accept": "application/json",
+              "User-Agent": "grupo-uniao-lead-export-action",
           }
 
           request = urllib.request.Request(export_url, headers=headers, method="GET")
-          with urllib.request.urlopen(request, timeout=30) as response:
-              payload = json.loads(response.read().decode("utf-8"))
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  payload = json.loads(response.read().decode("utf-8"))
+          except urllib.error.HTTPError as error:
+              print(f"Lead export request failed with HTTP {error.code}: {error.read().decode('utf-8', errors='replace')}")
+              raise
 
           items = payload.get("items", [])
           if not items:
