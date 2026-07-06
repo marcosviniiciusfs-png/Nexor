@@ -113,6 +113,8 @@ const buildLeadPayload = (leadData) => ({
 
 const buildLeadDestinations = (env) => {
   const destinations = [];
+  const hurtzCrmUrl = env.HURTZ_CRM_WEBHOOK_URL || env.HURTZ_LEAD_WEBHOOK_URL;
+  const hurtzCrmSecret = env.HURTZ_CRM_WEBHOOK_SECRET || env.HURTZ_WEBHOOK_SECRET;
 
   if (env.LEAD_WEBHOOK_URL) {
     destinations.push({
@@ -123,15 +125,19 @@ const buildLeadDestinations = (env) => {
     });
   }
 
-  if (env.HURTZ_LEAD_WEBHOOK_URL) {
+  if (hurtzCrmUrl) {
     destinations.push({
       name: "hurtz_crm",
-      url: env.HURTZ_LEAD_WEBHOOK_URL,
-      headers: env.HURTZ_WEBHOOK_SECRET
-        ? {
-            "X-Hurtz-Webhook-Secret": env.HURTZ_WEBHOOK_SECRET,
-          }
-        : undefined,
+      url: hurtzCrmUrl,
+      headers: {
+        "X-Hurtz-Webhook-Secret": hurtzCrmSecret,
+      },
+      requiredSecrets: [
+        {
+          name: "HURTZ_CRM_WEBHOOK_SECRET",
+          value: hurtzCrmSecret,
+        },
+      ],
     });
   }
 
@@ -197,6 +203,63 @@ const queueLeadForGitHubExport = async (leadPayload, env, traceId) => {
       success: false,
       path,
       error: error instanceof Error ? error.message : "Unknown lead queue error",
+    };
+  }
+};
+
+const dispatchLeadExportWorkflow = async (queuedLead, env) => {
+  const repository = env.GITHUB_DISPATCH_REPOSITORY;
+  const eventType = env.GITHUB_DISPATCH_EVENT || "lead-created";
+
+  if (!repository) {
+    return { success: true, skipped: true, reason: "GITHUB_DISPATCH_REPOSITORY is not configured" };
+  }
+
+  if (!/^[^/]+\/[^/]+$/.test(repository)) {
+    return { success: false, error: "GITHUB_DISPATCH_REPOSITORY must use the owner/repo format" };
+  }
+
+  if (!env.GITHUB_DISPATCH_TOKEN) {
+    return { success: true, skipped: true, reason: "GITHUB_DISPATCH_TOKEN is not configured" };
+  }
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${repository}/dispatches`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json",
+        "User-Agent": "grupo-uniao-lead-worker",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      body: JSON.stringify({
+        event_type: eventType,
+        client_payload: {
+          key: queuedLead.key,
+          path: queuedLead.path,
+        },
+      }),
+    });
+    const data = await readResponseBody(response);
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        data,
+        error:
+          data && typeof data === "object" && data.message
+            ? String(data.message)
+            : `GitHub dispatch error: ${response.status}`,
+      };
+    }
+
+    return { success: true, status: response.status, repository, eventType };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown GitHub dispatch error",
     };
   }
 };
@@ -533,9 +596,25 @@ export default {
         );
       }
 
+      const githubDispatch = await dispatchLeadExportWorkflow(githubStorage, env);
+
+      if (!githubDispatch.success) {
+        return jsonResponse(
+          {
+            success: false,
+            error: githubDispatch.error || "GitHub lead export dispatch failed",
+            leadWebhooks,
+            githubStorage,
+            githubDispatch,
+            traceId,
+          },
+          502
+        );
+      }
+
       const metaCapi = await sendMetaCapi(leadPayload, request, env);
 
-      return jsonResponse({ success: true, leadWebhooks, githubStorage, metaCapi, traceId });
+      return jsonResponse({ success: true, leadWebhooks, githubStorage, githubDispatch, metaCapi, traceId });
     } catch (error) {
       return jsonResponse(
         {

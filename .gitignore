@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+cloudflare/.wrangler/
 
 # Local source assets kept out of deploy commits
 Nova logo/

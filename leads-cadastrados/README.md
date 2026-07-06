@@ -1,8 +1,8 @@
 # Leads cadastrados
 
 Esta pasta recebe automaticamente os leads enviados pelo simulador do Grupo
-Uniao. O Worker grava cada cadastro em uma fila KV, e a GitHub Action de
-exportacao cria os arquivos aqui periodicamente.
+Uniao. O Worker grava cada cadastro em uma fila KV e dispara a GitHub Action de
+exportacao no mesmo envio do lead.
 
 Cada cadastro confirmado pelo Worker gera um arquivo JSON em:
 
