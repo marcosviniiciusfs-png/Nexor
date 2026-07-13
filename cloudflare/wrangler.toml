@@ -8,7 +8,7 @@ HURTZ_CRM_WEBHOOK_URL = "https://crm.hurtzcompany.com.br/webhooks/lead_forms/kVK
 GITHUB_DISPATCH_REPOSITORY = "marcosviniiciusfs-png/Nexor"
 GITHUB_DISPATCH_EVENT = "lead-created"
 GITHUB_LEADS_DIRECTORY = "leads-cadastrados"
-META_PIXEL_ID = "1002345206086674"
+META_PIXEL_ID = "1046333127914247"
 META_GRAPH_API_VERSION = "v25.0"
 
 [[kv_namespaces]]
