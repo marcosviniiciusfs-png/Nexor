@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBanner from "@/assets/hero-banner.png";
+import nexorLogo from "@/assets/nexor-logo.png";
 
 interface HeroSectionProps {
   onSimulateClick: () => void;
@@ -10,8 +11,8 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
   const benefits = [
     "100% Gratuito",
     "Sem consulta ao SPC",
-    "Resultado no WhatsApp",
-    "Lojas em parceria"
+    "Resposta pelo WhatsApp",
+    "Planos para imóveis e veículos"
   ];
 
   return (
@@ -19,12 +20,17 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
+            <img
+              src={nexorLogo}
+              alt="Nexor Financeira"
+              className="h-20 w-auto object-contain"
+            />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight">
-              Simule agora o seu crédito ideal para conquistar o seu sonho
+              Simule seu crédito com a Nexor Financeira
             </h1>
             
             <p className="text-lg text-muted-foreground font-medium">
-              + de 1000 simulações realizadas
+              Planeje a conquista do seu imóvel, veículo ou bem com atendimento próximo e condições personalizadas.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

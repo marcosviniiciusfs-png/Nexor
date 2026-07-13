@@ -34,7 +34,7 @@ const BenefitsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Por que escolher o Grupo União?
+            Por que escolher a Nexor Financeira?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Oferecemos as melhores condições do mercado com total transparência e agilidade.

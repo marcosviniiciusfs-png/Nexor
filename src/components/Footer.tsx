@@ -1,6 +1,6 @@
 import { Phone, MapPin, Clock, Instagram } from "lucide-react";
-import grupoUniaoLogo from "@/assets/grupo-uniao-logo.png";
-import facebookIcon from "@/assets/facebook.png";
+import nexorLogo from "@/assets/nexor-logo.png";
+import { company } from "@/config/company";
 
 const Footer = () => {
   return (
@@ -9,32 +9,24 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex flex-col items-center md:items-start gap-2 mb-4">
-              <div className="h-32 w-32 flex items-center justify-center md:justify-start">
+              <div className="flex h-28 w-44 items-center justify-center md:justify-start">
                 <img
-                  src={grupoUniaoLogo}
-                  alt="Grupo União"
-                  className="h-32 w-32 object-contain"
+                  src={nexorLogo}
+                  alt={company.name}
+                  className="h-28 w-auto max-w-full object-contain"
                 />
               </div>
             </div>
             <div className="flex items-center gap-4 mt-2">
               <a
-                href="https://www.facebook.com/profile.php?id=61590892280481#"
+                href={company.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-brand-blue transition-colors"
-                aria-label="Facebook do Grupo União"
-              >
-                <img src={facebookIcon} alt="Facebook" className="w-8 h-8" />
-              </a>
-              <a
-                href="https://www.instagram.com/grupouniao_sf/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-brand-blue transition-colors"
-                aria-label="Instagram do Grupo União"
+                className="inline-flex items-center gap-2 text-white hover:text-brand-blue transition-colors"
+                aria-label={`Instagram da ${company.name}`}
               >
                 <Instagram className="w-8 h-8" />
+                <span className="font-medium">{company.instagramLabel}</span>
               </a>
             </div>
           </div>
@@ -46,7 +38,14 @@ const Footer = () => {
                 <Phone className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div>
                   <p className="font-semibold">WhatsApp</p>
-                  <p className="text-white/90">(15) 9 9767-1986</p>
+                  <a
+                    href={`https://wa.me/${company.phoneDigits}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/90 hover:text-brand-blue transition-colors"
+                  >
+                    {company.phoneDisplay}
+                  </a>
                 </div>
               </div>
             </div>
@@ -59,10 +58,7 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
                 <div>
                   <p className="text-white/90">
-                    Rua José Maria Barbosa, n° 31<br />
-                    Edifício Torre Sul, Sala 94<br />
-                    Jardim Portal da Colina<br />
-                    Sorocaba - SP, CEP: 18047-380
+                    {company.location}
                   </p>
                 </div>
               </div>
@@ -83,7 +79,7 @@ const Footer = () => {
         <div className="border-t border-brand-blue/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/90 text-sm">
-              © 2026 Grupo União. Todos os direitos reservados.
+              © 2026 {company.name}. Todos os direitos reservados.
             </p>
             <div className="flex gap-6 text-sm">
               <button className="text-white/90 hover:text-white transition-colors">

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import grupoUniaoLogo from "@/assets/grupo-uniao-logo.png";
-
+import nexorLogo from "@/assets/nexor-logo.png";
+import { company } from "@/config/company";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,11 +19,11 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-[hsl(var(--header-footer))] border-b border-brand-blue/40 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-14 w-14 flex items-center">
+          <div className="flex h-14 w-36 items-center">
             <img
-              src={grupoUniaoLogo}
-              alt="Grupo União"
-              className="h-14 w-14 object-contain"
+              src={nexorLogo}
+              alt={company.name}
+              className="h-14 w-auto max-w-full object-contain"
             />
           </div>
         </div>
@@ -40,7 +40,7 @@ const Header = () => {
             onClick={() => scrollToSection("beneficios")}
             className="text-white hover:text-brand-blue transition-colors"
           >
-            Beneficios
+            Benefícios
           </button>
           <button
             onClick={() => scrollToSection("contato")}
@@ -75,7 +75,7 @@ const Header = () => {
               onClick={() => scrollToSection("beneficios")}
               className="text-white hover:text-brand-blue transition-colors text-left py-2"
             >
-              Beneficios
+              Benefícios
             </button>
             <button
               onClick={() => scrollToSection("contato")}

@@ -104,7 +104,10 @@ const buildLeadPayload = (leadData) => ({
   parcela_ideal_numero: leadData.parcela_ideal_numero,
   cidade: leadData.cidade,
   tempo_aquisicao: leadData.tempo_aquisicao,
-  origem: leadData.origem || "simulador_grupo_uniao",
+  origem: leadData.origem || "simulador_nexor_financeira",
+  empresa: leadData.empresa || "Nexor Financeira",
+  telefone_empresa: leadData.telefone_empresa || "5511970720259",
+  whatsapp_destino: leadData.whatsapp_destino || "5511970720259",
   data_entrada: leadData.data_entrada || new Date().toISOString().split("T")[0],
   event_id: leadData.event_id,
   source_url: leadData.source_url,
@@ -178,7 +181,7 @@ const queueLeadForGitHubExport = async (leadPayload, env, traceId) => {
     schema_version: 1,
     stored_at: storedAt,
     trace_id: traceId,
-    source: "simulador_grupo_uniao",
+    source: "simulador_nexor_financeira",
     path,
     lead: leadPayload,
   };
@@ -230,7 +233,7 @@ const dispatchLeadExportWorkflow = async (queuedLead, env) => {
         Authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
         Accept: "application/vnd.github+json",
         "Content-Type": "application/json",
-        "User-Agent": "grupo-uniao-lead-worker",
+        "User-Agent": "nexor-lead-worker",
         "X-GitHub-Api-Version": "2022-11-28",
       },
       body: JSON.stringify({
@@ -331,7 +334,7 @@ const buildMetaCapiPayload = async (leadData, request) => {
   const { firstName, lastName } = splitName(leadData.nome);
   const phone = normalizePhoneForMeta(leadData.telefone || leadData.whatsapp);
   const hashedPhone = phone ? await sha256Hex(phone) : undefined;
-  const eventSourceUrl = leadData.source_url || request.headers.get("Origin") || "https://grupouniao.simulead.com.br/";
+  const eventSourceUrl = leadData.source_url || request.headers.get("Origin") || "https://nexor.simulead.com.br/";
   const clientIp = request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For")?.split(",")[0]?.trim();
 
   return {
@@ -356,7 +359,7 @@ const buildMetaCapiPayload = async (leadData, request) => {
         custom_data: compactObject({
           currency: "BRL",
           value: parseNumericValue(leadData.valor_pretendido_numero ?? leadData.valor_pretendido),
-          content_name: "Simulador Grupo União",
+          content_name: "Simulador Nexor Financeira",
           content_category: "IMOVEL",
           tipo: "IMOVEL",
           tipo_bem: leadData.tipo_bem,

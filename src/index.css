@@ -9,61 +9,61 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 15%;
+    --foreground: 160 58% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 15%;
+    --card-foreground: 160 58% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 15%;
+    --popover-foreground: 160 58% 8%;
 
-    --primary: 0 0% 0%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 0 0% 10%;
+    --primary: 160 58% 8%;
+    --primary-foreground: 47 98% 82%;
+    --primary-hover: 160 58% 12%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 43 88% 96%;
+    --secondary-foreground: 160 58% 8%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 43 33% 95%;
+    --muted-foreground: 156 15% 35%;
 
-    --accent: 45 58% 90%;
-    --accent-foreground: 0 0% 0%;
+    --accent: 47 98% 82%;
+    --accent-foreground: 160 58% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 222 85% 28%;
+    --border: 43 28% 85%;
+    --input: 43 28% 85%;
+    --ring: 40 61% 56%;
 
     --radius: 0.75rem;
     
-    --gradient-primary: linear-gradient(135deg, hsl(0 0% 0%), hsl(0 0% 10%));
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 16px rgba(15, 58, 140, 0.2);
+    --gradient-primary: linear-gradient(135deg, hsl(160 58% 8%), hsl(160 58% 12%));
+    --shadow-card: 0 2px 8px rgba(9, 34, 28, 0.08);
+    --shadow-hover: 0 4px 16px rgba(211, 165, 75, 0.22);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 43 88% 96%;
 
-    --sidebar-foreground: 0 0% 24%;
+    --sidebar-foreground: 160 58% 8%;
 
-    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary: 160 58% 8%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary-foreground: 47 98% 82%;
 
-    --sidebar-accent: 45 58% 90%;
+    --sidebar-accent: 47 98% 82%;
 
-    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-accent-foreground: 160 58% 8%;
 
-    --sidebar-border: 0 0% 90%;
+    --sidebar-border: 43 28% 85%;
 
-    --sidebar-ring: 0 0% 0%;
+    --sidebar-ring: 40 61% 56%;
     
-    --header-footer: 0 0% 0%;
-    --orange: 45 68% 49%;
-    --brand-blue: 222 85% 28%;
-    --brand-blue-hover: 222 88% 22%;
-    --brand-blue-soft: 218 72% 94%;
+    --header-footer: 160 58% 8%;
+    --orange: 38 49% 47%;
+    --brand-blue: 40 61% 56%;
+    --brand-blue-hover: 38 49% 47%;
+    --brand-blue-soft: 47 98% 82%;
   }
 
   .dark {
@@ -116,5 +116,11 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Montserrat", "Segoe UI", Arial, sans-serif;
+  }
+
+  h1,
+  h2 {
+    font-family: Perpetua, Georgia, "Times New Roman", serif;
   }
 }

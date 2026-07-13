@@ -1,3 +1,5 @@
+import { company } from "@/config/company";
+
 export type LeadWebhookData = {
   fullName: string;
   whatsapp: string;
@@ -25,6 +27,9 @@ type LeadWebhookPayload = {
   cidade: string;
   tempo_aquisicao: string;
   origem: string;
+  empresa: string;
+  telefone_empresa: string;
+  whatsapp_destino: string;
   data_entrada: string;
   source_url: string;
   user_agent: string;
@@ -111,7 +116,10 @@ export const buildLeadWebhookPayload = (
     parcela_ideal_numero: parseCurrencyNumber(data.monthlyPayment),
     cidade: data.city.trim(),
     tempo_aquisicao: data.acquisitionTime,
-    origem: "simulador_grupo_uniao",
+    origem: company.leadSource,
+    empresa: company.name,
+    telefone_empresa: company.phoneDigits,
+    whatsapp_destino: company.phoneDigits,
     data_entrada: new Date().toISOString().split("T")[0],
     source_url: window.location.href,
     user_agent: navigator.userAgent,

@@ -17,19 +17,34 @@ type ClientMedia = {
 
 const clientMedia: ClientMedia[] = [
   {
-    src: "/clientes-contemplados/cliente-contemplado-01.mp4",
-    type: "video",
-    label: "Video de cliente contemplado 1",
+    src: "/clientes-contemplados/cliente-nexor-01.jpeg",
+    type: "image",
+    label: "Cliente contemplado Nexor 1",
   },
   {
-    src: "/clientes-contemplados/cliente-contemplado-02.mp4",
+    src: "/clientes-contemplados/cliente-nexor-02.jpeg",
+    type: "image",
+    label: "Cliente contemplado Nexor 2",
+  },
+  {
+    src: "/clientes-contemplados/cliente-nexor-03.jpeg",
+    type: "image",
+    label: "Cliente contemplado Nexor 3",
+  },
+  {
+    src: "/clientes-contemplados/cliente-nexor-04.jpeg",
+    type: "image",
+    label: "Cliente contemplado Nexor 4",
+  },
+  {
+    src: "/clientes-contemplados/cliente-nexor-05.mp4",
     type: "video",
-    label: "Video de cliente contemplado 2",
+    label: "Vídeo de cliente contemplado Nexor",
   },
 ];
 
 const mediaFrameStyle = {
-  aspectRatio: "1920 / 1024",
+  aspectRatio: "4 / 5",
 } satisfies CSSProperties;
 
 const TestimonialsSection = () => {
@@ -73,7 +88,7 @@ const TestimonialsSection = () => {
             Clientes Contemplados
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Muitas pessoas já realizaram seus sonhos através dos nossos planos.
+            Pessoas que já deram o próximo passo com planejamento e crédito sob medida.
           </p>
         </div>
 
@@ -110,7 +125,7 @@ const TestimonialsSection = () => {
               {clientMedia.map((media, index) => (
                 <CarouselItem
                   key={index}
-                  className="pl-2 md:pl-4 basis-full md:basis-1/2"
+                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
                 >
                   <div className="overflow-hidden rounded-xl shadow-lg bg-black" style={mediaFrameStyle}>
                     {media.type === "image" ? (

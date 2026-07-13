@@ -23,7 +23,7 @@ Required variables:
 ```bash
 LEAD_WEBHOOK_URL=https://webhook.simulead.com.br/webhook/e4ce4839-bb0c-4ade-ac79-7f5325be5104
 HURTZ_CRM_WEBHOOK_URL=https://crm.hurtzcompany.com.br/webhooks/lead_forms/kVKxfWju8fYi8CXArWTwkP1B
-GITHUB_DISPATCH_REPOSITORY=marcosviniiciusfs-png/grupo-uniao
+GITHUB_DISPATCH_REPOSITORY=marcosviniiciusfs-png/Nexor
 GITHUB_DISPATCH_EVENT=lead-created
 GITHUB_LEADS_DIRECTORY=leads-cadastrados
 META_PIXEL_ID=1002345206086674

@@ -22,7 +22,7 @@ jobs:
       - name: Export pending leads
         env:
           LEAD_EXPORT_TOKEN: ${{ secrets.LEAD_EXPORT_TOKEN }}
-          LEAD_EXPORT_URL: https://grupo-uniao-lead-webhook.marcosviniicius-fs.workers.dev/lead-export
+          LEAD_EXPORT_URL: https://nexor-lead-webhook.marcosviniicius-fs.workers.dev/lead-export
         run: |
           python <<'PY'
           import json
@@ -38,7 +38,7 @@ jobs:
           headers = {
               "Authorization": f"Bearer {export_token}",
               "Accept": "application/json",
-              "User-Agent": "grupo-uniao-lead-export-action",
+              "User-Agent": "nexor-lead-export-action",
           }
 
           request = urllib.request.Request(export_url, headers=headers, method="GET")
@@ -83,7 +83,7 @@ jobs:
 
           has_changes = subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0
           if has_changes:
-              subprocess.run(["git", "commit", "-m", "Export Grupo Uniao leads"], check=True)
+              subprocess.run(["git", "commit", "-m", "Export Nexor leads"], check=True)
               subprocess.run(["git", "push"], check=True)
           else:
               print("Pending leads were already present in the repository.")
