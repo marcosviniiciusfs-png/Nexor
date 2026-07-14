@@ -1,4 +1,4 @@
-name = "grupo-uniao-lead-webhook"
+name = "nexor-financeira"
 main = "lead-webhook-worker.js"
 compatibility_date = "2026-06-03"
 
