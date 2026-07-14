@@ -1,16 +1,7 @@
-name = "nexor-lead-webhook"
+name = "grupo-uniao-lead-webhook"
 main = "lead-webhook-worker.js"
 compatibility_date = "2026-06-03"
 
 [vars]
-LEAD_WEBHOOK_URL = "https://webhook.simulead.com.br/webhook/e4ce4839-bb0c-4ade-ac79-7f5325be5104"
-HURTZ_CRM_WEBHOOK_URL = "https://crm.hurtzcompany.com.br/webhooks/lead_forms/kVKxfWju8fYi8CXArWTwkP1B"
-GITHUB_DISPATCH_REPOSITORY = "marcosviniiciusfs-png/Nexor"
-GITHUB_DISPATCH_EVENT = "lead-created"
-GITHUB_LEADS_DIRECTORY = "leads-cadastrados"
 META_PIXEL_ID = "1046333127914247"
 META_GRAPH_API_VERSION = "v25.0"
-
-[[kv_namespaces]]
-binding = "LEADS_KV"
-id = "28d836395d9b4f2688e0be56e97753e9"
