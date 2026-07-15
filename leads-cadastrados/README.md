@@ -1,8 +1,11 @@
 # Leads cadastrados
 
-Esta pasta recebe automaticamente os leads enviados pelo simulador do Grupo
-Uniao. O Worker grava cada cadastro em uma fila KV e dispara a GitHub Action de
-exportacao no mesmo envio do lead.
+Esta pasta recebe automaticamente os leads enviados pelo simulador da Nexor
+Financeira.
+
+Quando o Worker confirma o envio para a Meta Conversions API, ele tambem grava
+um arquivo JSON do lead nesta pasta usando a GitHub Contents API. O cadastro so
+e considerado concluido quando os dois passos terminam com sucesso.
 
 Cada cadastro confirmado pelo Worker gera um arquivo JSON em:
 

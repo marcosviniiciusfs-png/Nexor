@@ -5,7 +5,9 @@ const corsHeaders = {
   "Access-Control-Max-Age": "86400",
 };
 
-const MODE = "meta_conversions_only";
+const MODE = "meta_conversions_with_github_archive";
+const DEFAULT_GITHUB_LEADS_DIR = "leads-cadastrados";
+const GITHUB_API_VERSION = "2022-11-28";
 
 const jsonResponse = (body, status = 200) =>
   new Response(JSON.stringify({ mode: MODE, ...body }), {
@@ -25,6 +27,32 @@ const readResponseBody = async (response) => {
   } catch {
     return text;
   }
+};
+
+const trimSlashes = (value) => String(value || "").replace(/^\/+|\/+$/g, "");
+
+const slugify = (value, fallback = "lead") => {
+  const slug = String(value || "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return slug || fallback;
+};
+
+const bytesToBase64 = (value) => {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  const chunkSize = 0x8000;
+
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+  }
+
+  return btoa(binary);
 };
 
 const compactObject = (object) =>
@@ -97,6 +125,95 @@ const buildLeadPayload = (leadData) => ({
   source_url: leadData.source_url,
   user_agent: leadData.user_agent,
 });
+
+const getGitHubArchiveConfig = (env) => ({
+  owner: env.GITHUB_LEADS_OWNER || "marcosviniiciusfs-png",
+  repo: env.GITHUB_LEADS_REPO || "Nexor",
+  branch: env.GITHUB_LEADS_BRANCH || "main",
+  dir: trimSlashes(env.GITHUB_LEADS_DIR || DEFAULT_GITHUB_LEADS_DIR) || DEFAULT_GITHUB_LEADS_DIR,
+});
+
+const buildArchiveFilePath = (leadData, traceId, archivedAt, env) => {
+  const { dir } = getGitHubArchiveConfig(env);
+  const date = archivedAt.slice(0, 10);
+  const timestamp = archivedAt.replace(/[:.]/g, "-");
+  const leadSlug = slugify(leadData.nome || leadData.telefone);
+
+  return `${dir}/${date}/${timestamp}-${traceId.toLowerCase()}-${leadSlug}.json`;
+};
+
+const buildLeadArchiveRecord = (leadData, request, traceId, archivedAt, metaCapi) => ({
+  archive_version: 1,
+  archived_at: archivedAt,
+  trace_id: traceId,
+  mode: MODE,
+  destination_results: {
+    meta_capi: {
+      success: Boolean(metaCapi?.success),
+      status: metaCapi?.status,
+      data: metaCapi?.data,
+    },
+  },
+  lead: leadData,
+  request: {
+    source_url: leadData.source_url,
+    user_agent: leadData.user_agent || request.headers.get("User-Agent"),
+    client_ip_address:
+      request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For")?.split(",")[0]?.trim(),
+  },
+});
+
+const archiveLeadToGitHub = async (leadData, request, env, { traceId, metaCapi }) => {
+  if (!env.GITHUB_LEADS_TOKEN) {
+    return { success: false, error: "GITHUB_LEADS_TOKEN is not configured" };
+  }
+
+  const archivedAt = new Date().toISOString();
+  const config = getGitHubArchiveConfig(env);
+  const path = buildArchiveFilePath(leadData, traceId, archivedAt, env);
+  const record = buildLeadArchiveRecord(leadData, request, traceId, archivedAt, metaCapi);
+  const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(
+    config.repo
+  )}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": `Bearer ${env.GITHUB_LEADS_TOKEN}`,
+      "Content-Type": "application/json",
+      "User-Agent": "nexor-financeira-lead-worker",
+      "X-GitHub-Api-Version": GITHUB_API_VERSION,
+    },
+    body: JSON.stringify({
+      message: `Registra lead Nexor ${leadData.nome || traceId}`,
+      content: bytesToBase64(JSON.stringify(record, null, 2)),
+      branch: config.branch,
+    }),
+  });
+  const data = await readResponseBody(response);
+
+  if (!response.ok) {
+    return {
+      success: false,
+      status: response.status,
+      data,
+      path,
+      error:
+        data && typeof data === "object" && data.message
+          ? String(data.message)
+          : `GitHub lead archive error: ${response.status}`,
+    };
+  }
+
+  return {
+    success: true,
+    status: response.status,
+    path,
+    commit_sha: data?.commit?.sha,
+    html_url: data?.content?.html_url,
+  };
+};
 
 const buildMetaCapiPayload = async (leadData, request) => {
   const { firstName, lastName } = splitName(leadData.nome);
@@ -238,7 +355,22 @@ export default {
         );
       }
 
-      return jsonResponse({ success: true, metaCapi, traceId });
+      const leadArchive = await archiveLeadToGitHub(leadPayload, request, env, { traceId, metaCapi });
+
+      if (!leadArchive.success) {
+        return jsonResponse(
+          {
+            success: false,
+            error: leadArchive.error || "GitHub lead archive failed",
+            metaCapi,
+            leadArchive,
+            traceId,
+          },
+          502
+        );
+      }
+
+      return jsonResponse({ success: true, metaCapi, leadArchive, traceId });
     } catch (error) {
       return jsonResponse(
         {

@@ -5,3 +5,7 @@ compatibility_date = "2026-06-03"
 [vars]
 META_PIXEL_ID = "1046333127914247"
 META_GRAPH_API_VERSION = "v25.0"
+GITHUB_LEADS_OWNER = "marcosviniiciusfs-png"
+GITHUB_LEADS_REPO = "Nexor"
+GITHUB_LEADS_BRANCH = "main"
+GITHUB_LEADS_DIR = "leads-cadastrados"
