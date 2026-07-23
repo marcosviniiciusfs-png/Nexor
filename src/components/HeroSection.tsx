@@ -9,9 +9,10 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
   const benefits = [
-    "100% Gratuito",
-    "Sem consulta ao SPC",
-    "Resposta pelo WhatsApp",
+    "Consórcio | Carta de Crédito",
+    "Projeção de Financiamento",
+    "Empréstimo CLT",
+    "Antecipação de FGTS",
     "Planos para imóveis e veículos"
   ];
 
