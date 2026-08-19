@@ -1,7 +1,7 @@
 export const company = {
   name: "Nexor Financeira",
-  phoneDisplay: "(11) 92157-7591",
-  phoneDigits: "5511921577591",
+  phoneDisplay: "(11) 94255-2177",
+  phoneDigits: "5511942552177",
   instagramLabel: "Nexor Financeira",
   instagramUrl: "https://www.instagram.com/nexorfinanceira/",
   location: "São Bernardo do Campo - SP",

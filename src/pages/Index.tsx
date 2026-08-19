@@ -22,8 +22,8 @@ const Index = () => {
       <main>
         <HeroSection onSimulateClick={scrollToSimulator} />
         <Simulator />
-        <BenefitsSection />
         <TestimonialsSection />
+        <BenefitsSection />
       </main>
       <Footer />
     </div>

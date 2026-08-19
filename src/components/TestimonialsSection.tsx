@@ -100,7 +100,7 @@ const TestimonialsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Clientes Contemplados
+            CLIENTES QUE CONFIARAM NA NOSSA EMPRESA
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Pessoas que já deram o próximo passo com planejamento e crédito sob medida.
