@@ -56,6 +56,11 @@ const clientMedia: ClientMedia[] = [
     type: "image",
     label: "Cliente contemplado Nexor 8",
   },
+  {
+    src: "/clientes-contemplados/cliente-nexor-09.mp4",
+    type: "video",
+    label: "Vídeo de cliente contemplado Nexor 9",
+  },
 ];
 
 const mediaFrameStyle = {
