@@ -19,47 +19,47 @@ const clientMedia: ClientMedia[] = [
   {
     src: "/clientes-contemplados/cliente-nexor-01.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 1",
+    label: "Cliente contemplado do Grupo LR 1",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-02.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 2",
+    label: "Cliente contemplado do Grupo LR 2",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-03.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 3",
+    label: "Cliente contemplado do Grupo LR 3",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-04.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 4",
+    label: "Cliente contemplado do Grupo LR 4",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-05.mp4",
     type: "video",
-    label: "Vídeo de cliente contemplado Nexor",
+    label: "Vídeo de cliente contemplado do Grupo LR",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-06.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 6",
+    label: "Cliente contemplado do Grupo LR 6",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-07.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 7",
+    label: "Cliente contemplado do Grupo LR 7",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-08.jpeg",
     type: "image",
-    label: "Cliente contemplado Nexor 8",
+    label: "Cliente contemplado do Grupo LR 8",
   },
   {
     src: "/clientes-contemplados/cliente-nexor-09.mp4",
     type: "video",
-    label: "Vídeo de cliente contemplado Nexor 9",
+    label: "Vídeo de cliente contemplado do Grupo LR 9",
   },
 ];
 

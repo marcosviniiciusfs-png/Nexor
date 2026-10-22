@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBanner from "@/assets/hero-banner.png";
-import nexorLogo from "@/assets/nexor-logo.png";
+import { company } from "@/config/company";
 
 interface HeroSectionProps {
   onSimulateClick: () => void;
@@ -21,13 +21,18 @@ const HeroSection = ({ onSimulateClick }: HeroSectionProps) => {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
-            <img
-              src={nexorLogo}
-              alt="Nexor Financeira"
-              className="h-20 w-auto object-contain"
-            />
+            <div className="flex items-center gap-4">
+              <img
+                src="/grupo-lr-logo.png"
+                alt="Logo Grupo LR"
+                className="h-20 w-auto object-contain"
+              />
+              <span className="text-xl md:text-2xl font-semibold text-primary">
+                {company.name}
+              </span>
+            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight">
-              Simule seu crédito com a Nexor Financeira
+              Simule seu crédito com a {company.name}
             </h1>
             
             <p className="text-lg text-muted-foreground font-medium">

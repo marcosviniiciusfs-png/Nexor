@@ -1,28 +1,26 @@
 import { Phone, MapPin, Clock, Instagram } from "lucide-react";
-import nexorLogo from "@/assets/nexor-logo.png";
 import { company } from "@/config/company";
 
 const Footer = () => {
   return (
-    <footer id="contato" className="bg-[hsl(var(--header-footer))] border-t-4 border-brand-blue text-white">
+    <footer id="contato" className="bg-[hsl(var(--header-footer))] border-t-4 border-brand-blue-soft/70 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
-            <div className="flex flex-col items-center md:items-start gap-2 mb-4">
-              <div className="flex h-28 w-44 items-center justify-center md:justify-start">
-                <img
-                  src={nexorLogo}
-                  alt={company.name}
-                  className="h-28 w-auto max-w-full object-contain"
-                />
-              </div>
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+              <img
+                src="/grupo-lr-logo.png"
+                alt="Logo Grupo LR"
+                className="h-20 w-auto object-contain"
+              />
+              <span className="font-semibold tracking-wide">{company.name}</span>
             </div>
             <div className="flex items-center gap-4 mt-2">
               <a
                 href={company.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white hover:text-brand-blue transition-colors"
+                className="inline-flex items-center gap-2 text-white hover:text-brand-blue-soft transition-colors"
                 aria-label={`Instagram da ${company.name}`}
               >
                 <Instagram className="w-8 h-8" />
@@ -42,7 +40,7 @@ const Footer = () => {
                     href={`https://wa.me/${company.phoneDigits}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/90 hover:text-brand-blue transition-colors"
+                    className="text-white/90 hover:text-brand-blue-soft transition-colors"
                   >
                     {company.phoneDisplay}
                   </a>
@@ -76,7 +74,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-brand-blue/30 pt-8">
+        <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/90 text-sm">
               © 2026 {company.name}. Todos os direitos reservados.

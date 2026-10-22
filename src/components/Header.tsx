@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import nexorLogo from "@/assets/nexor-logo.png";
 import { company } from "@/config/company";
 
 const Header = () => {
@@ -16,35 +15,36 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[hsl(var(--header-footer))] border-b border-brand-blue/40 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[hsl(var(--header-footer))] border-b border-white/20 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-14 w-36 items-center">
-            <img
-              src={nexorLogo}
-              alt={company.name}
-              className="h-14 w-auto max-w-full object-contain"
-            />
-          </div>
+        <div className="flex items-center gap-3">
+          <img
+            src="/grupo-lr-logo.png"
+            alt="Logo Grupo LR"
+            className="h-14 w-auto object-contain"
+          />
+          <span className="text-base sm:text-lg font-semibold tracking-wide text-white">
+            {company.name}
+          </span>
         </div>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-6">
           <button
             onClick={() => scrollToSection("simulador")}
-            className="text-white hover:text-brand-blue transition-colors"
+            className="text-white hover:text-brand-blue-soft transition-colors"
           >
             Simulador
           </button>
           <button
             onClick={() => scrollToSection("beneficios")}
-            className="text-white hover:text-brand-blue transition-colors"
+            className="text-white hover:text-brand-blue-soft transition-colors"
           >
             Benefícios
           </button>
           <button
             onClick={() => scrollToSection("contato")}
-            className="text-white hover:text-brand-blue transition-colors"
+            className="text-white hover:text-brand-blue-soft transition-colors"
           >
             Contato
           </button>
@@ -54,7 +54,7 @@ const Header = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-white hover:bg-brand-blue/20"
+          className="md:hidden text-white hover:bg-white/10"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -63,23 +63,23 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-[hsl(var(--header-footer))] border-t border-brand-blue/30">
+        <div className="md:hidden bg-[hsl(var(--header-footer))] border-t border-white/20">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
             <button
               onClick={() => scrollToSection("simulador")}
-              className="text-white hover:text-brand-blue transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue-soft transition-colors text-left py-2"
             >
               Simulador
             </button>
             <button
               onClick={() => scrollToSection("beneficios")}
-              className="text-white hover:text-brand-blue transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue-soft transition-colors text-left py-2"
             >
               Benefícios
             </button>
             <button
               onClick={() => scrollToSection("contato")}
-              className="text-white hover:text-brand-blue transition-colors text-left py-2"
+              className="text-white hover:text-brand-blue-soft transition-colors text-left py-2"
             >
               Contato
             </button>
